@@ -21,7 +21,7 @@ class Author extends Component {
         axios
             .get(process.env.REACT_APP_API_URL + '/authors')
             .then(res => this.setState({
-                authors: res.data, 
+                authors: res.data,
                 author: {
                     id: 0,
                     name: '',
@@ -40,7 +40,6 @@ class Author extends Component {
             })
     }
     updateAuthor(val) {
-        console.log(val)
         axios
             .put(process.env.REACT_APP_API_URL + '/authorupdate', val)
             .then(res => this.getAuthors())
@@ -63,12 +62,21 @@ class Author extends Component {
         })
     }
     handleSubmit = () => {
-        console.log(this.state.author)
         if (this.state.isUpdate) {
             this.updateAuthor(this.state.author)
         } else {
             this.addAuthor(this.state.author)
         }
+    }
+    handleReset = () => {
+        this.setState({
+            author: {
+                id: 0,
+                name: '',
+                email: '',
+                status: 0
+            }
+        })
     }
     componentDidMount() {
         this.getAuthors();
@@ -91,12 +99,14 @@ class Author extends Component {
                             <Button variant="primary" name="btn_add_author" onClick={this.handleSubmit} type="button">
                                 Save
                             </Button>
-                            <Button variant="warning" name="btn_reset_author" type="reset">
+                            &nbsp;
+                            <Button variant="warning" name="btn_reset_author" type="button" onClick={this.handleReset}>
                                 Reset
                             </Button>
                         </Form>
                     </Col>
                 </Row>
+                <div style={{height: 20}}></div>
                 <TableComponent data={this.state.authors} removeFunc={(val) => this.deleteAuthor(val)} update={(val) => this.updateDataState(val)} />
             </Container>
         )
